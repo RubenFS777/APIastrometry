@@ -1,6 +1,6 @@
 # DEC vueltas 69 grados 360-40 = 320 1 vuelta 4.9275 grados. 1/4 de vuelta 1.2319 grados.
 # RA vueltas 116 grados 360-42 = 338 1 vuelta 2.9138 grados. 1/4 de vuelta 0.7845 grados.
-# Measure almost twice
+# Volver a medir
 
 import requests
 import json
@@ -8,19 +8,30 @@ import time
 import os
 
 #Funtions
-def verify_file(file_path):
-    if os.path.isfile(file_path):
-        print("The file  exists.")
+#def verify_file(file_path):
+#    if os.path.isfile(file_path):
+#        print("The file  exists.")
+#    else:
+#        print("The file does not exists.")
+
+def get_latest_file(folder):
+    files = os.listdir(folder)
+    if files:
+        file_paths = [os.path.join(folder, file) for file in files]
+        latest_file = max(file_paths, key=os.path.getctime)
+        return latest_file
     else:
-        print("The file does not exists.")
+        return None
 
 #Initialization of variable values
 login_url = 'http://nova.astrometry.net/api/login'
 upload_url = 'http://nova.astrometry.net/api/upload'
 api_key = "Your_API_Key"
 delay = 10 #10 seconds is the same values that nova uses for the website submit
-aim_to_ra = 270.89307777777777777778 #your RA goal
-aim_to_dec = 33.02916666666666666667 #your DEC goal
+
+#Nebula of the ring M 57
+aim_to_ra = 283.39616666666666666667
+aim_to_dec = 33.02916666666666666667
 
 #To make the login request
 response = requests.post(login_url, data={'request-json': json.dumps({"apikey": api_key})})
@@ -39,14 +50,18 @@ request_json = {
     "allow_commercial_use": "d"
 }
 
-#ToDo take for the place you run the program
-file_path = 'Your_path_file.fit'
-verify_file(file_path)
-
+#Take the last file
+folder = "/home/ruben/Imágenes/Astrophotography"  # Replace with the path to your folder
+latest_file = get_latest_file(folder)
+if latest_file:
+    print("The latest file is:", latest_file)
+else:
+    print("The folder is empty")
+    
 #Create multipart/form-data request data
 multipart_data = [
     ('request-json', (None, json.dumps(request_json), 'text/plain')),
-    ('file', (open(file_path, 'rb'))),
+    ('file', (open(latest_file, 'rb'))),
 ]
 #Send the POST request with the multipart/form-data data
 response = requests.post(upload_url, files=multipart_data)
@@ -117,18 +132,3 @@ while not_done:
         print("The 'jobs' field was not found in the response.")
     # Esperar 10 segundos antes de la siguiente verificación
     time.sleep(delay)
-
-#<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
-#<html><head>
-#<title>503 Service Unavailable</title>
-#</head><body>
-#<h1>Service Unavailable</h1>
-#<p>The server is temporarily unable to service your
-#request due to maintenance downtime or capacity
-#problems. Please try again later.</p>
-#<hr>
-#<address>Apache/2.4.41 (Ubuntu) Server at nova.astrometry.net Port 80</address>
-#</body></html>
-#Salida estandar de informaciń¡ón
-#{"objects_in_field": [], "machine_tags": [], "tags": [], "status": "success", "original_filename": "Light_ASIImg_0.5sec_Bin1_20.2C_gain252_2023-05-28_002959_frame0010.fit", "calibration": {"ra": 284.4193862490942, "dec": 33.08656471549371, "radius": 0.2805384046831555, "pixscale": 0.45845702014834766, "orientation": 90.76687401482185, "parity": 1.0}}
-
