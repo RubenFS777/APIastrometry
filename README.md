@@ -1,5 +1,5 @@
-# TAPAS (Telescope Assisted Pointing and Alignment System):
 ![Logo Tapas](https://raw.githubusercontent.com/RubenFS777/TAPAS/main/Logo%20Tapas.png)
+
 TAPAS is an assistance tool for pointing to any coordinates in the night sky. It was designed for telescopes with a camera and an equatorial mount but without a goto system. The initial versions assume that the telescope is properly set up, with a horizontal alignment, pointing north, and the correct latitude set.
 
 You need to set the coordinates you want to point to. TAPAS takes a photo and uploads it to [Astrometry.net](http://nova.astrometry.net). It then waits for a response and displays the coordinates of the central pixel of the photo in the terminal. TAPAS also provides you with the amount of correction needed in each axis (RA and DEC) in degrees.
