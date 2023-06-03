@@ -11,10 +11,10 @@ ToDo:
 
 - Create functions for easier reading.
 - Clean and improve the appearance of the returned information.
-- The default option should use the last file stored in the pre-observation folder.
 - Add options for taking a single file or a group of files as arguments.
   -- Groups of files will require a log track.
 
 Done:
 
 - Translated text to English.
+- The default option should use the last file stored in the pre-observation folder.
